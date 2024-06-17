@@ -1,0 +1,45 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f3f3f3;
+  font-family: 'Inter', sans-serif;
+}
+
+.side-navbar {
+  width: 250px;
+  background-color: #ffffff;
+  padding: 18px 14px;
+  position: fixed;
+  height: 100%;
+}
+
+.nav-link {
+  padding: 0;
+}
+
+.nav-link a {
+  display: block;
+  color: #3C567F;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  padding: 6.5px 11px;
+  border-radius: 4px;
+  transition: all ease-out .3s;
+}
+
+.nav-link.active a, .nav-link a:hover {
+  color: #ffffff;
+  background-color: #3C567F;
+}
+
+.side-navbar img {
+  margin-bottom: 34px;
+}
+
+.main-content {
+  margin-left: 250px; 
+  flex-grow: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}

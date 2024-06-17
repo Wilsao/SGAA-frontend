@@ -1,0 +1,11 @@
+.btn-whatsapp {
+    background-color: #6ad31d;
+    border-color: #6ad31d;
+    transition:  all ease-in-out .2s;
+}
+
+.btn-whatsapp:hover {
+    background-color: #6ad31d;
+    border-color: #6ad31d;
+    filter: brightness(115%);
+}

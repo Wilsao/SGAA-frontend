@@ -1,0 +1,148 @@
+.btn-success:not(:hover) {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success span {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 500;
+  color: #3c567f;
+}
+
+p {
+    color: #3C567F;
+}
+
+input.form-control , select.form-select {
+  border: 1px solid #3C567F !important;
+  background-color: transparent !important;
+  height: 53px;
+  padding: 0 20px;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.label-animation {
+  position: relative;
+}
+  
+.label-animation input,
+.label-animation textarea {
+  color: transparent;
+}
+  
+.label-animation input::placeholder,
+.label-animation textarea::placeholder {
+  opacity: 0 !important;
+}
+  
+.label-animation label {
+  pointer-events: none;
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  padding: 0 5px;
+  color: #3C567F;
+  transition: all 0.2s;
+  font-weight: 400;
+  background: transparent;
+}
+  
+.label-animation.active label,
+.label-animation.focus label,
+.label-animation.select-active label {
+  width: fit-content;
+  font-weight: 400;
+  background: #f3f3f3;
+  top: -10px;
+  font-size: 13px;
+  color: #3C567F;
+}
+  
+.label-animation.active input,
+.label-animation.active textarea,
+.label-animation.focus input,
+.label-animation.focus textarea,
+.label-animation.select-active input,
+.label-animation.select-active textarea {
+  color: #3C567F;
+}
+  
+.label-animation.active .o2-input,
+.label-animation.active .o2-select,
+.label-animation.focus .o2-input,
+.label-animation.focus .o2-select,
+.label-animation.select-active .o2-input,
+.label-animation.select-active .o2-select {
+  background-color: #f3f3f3;
+}
+  
+.label-animation option {
+  color: #3C567F;
+}
+  
+.label-animation.hide:not(.select-active) .o2-select {
+  color: transparent;
+}
+
+.list {
+  background-color: #ffffff;
+  border: 1px solid #3C567F;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.list th {
+  font-weight: 700;
+  color: #3C567F;
+}
+
+.list td {
+  color: #3C567F;
+}
+
+.list .btn-primary {
+  width: 72px;
+  height: 28px;
+  font-size: 14px;
+  --bs-btn-padding-x: 0; 
+  --bs-btn-padding-y: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-primary.view {
+  width: 95px;
+}
+
+.list .btn-primary svg {
+  margin-left: 3px;
+}
+
+.list .btn-danger {
+  width: 95px;
+  height: 28px;
+  font-size: 14px;
+  --bs-btn-padding-x: 0; 
+  --bs-btn-padding-y: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list .btn-danger svg {
+  margin-left: 3px;
+}
+
+.admin-viewer-pic {
+  width: 220px;
+  margin-bottom: 30px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
