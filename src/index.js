@@ -12,6 +12,9 @@ import CastracaoCadastro from "./Paginas/Castracao/CastracaoCadastro";
 import EventosArrecadacao from "./Paginas/Arrecadacao/EventosArrecadacao";
 import ArrecadacaoCadastro from "./Paginas/Arrecadacao/ArrecadacaoCadastro";
 import Adocao from "./Paginas/Adocao/Adocao.jsx";
+import ListagemAdocao from "./Paginas/Adocao/ListagemAdocao.jsx";
+import VisualizacaoAdocao from "./Paginas/Adocao/VisualizacaoAdocao.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -36,6 +39,14 @@ const router = createBrowserRouter([
       {
         path: "/adocao",
         element: <Adocao />,
+      },
+      {
+        path: "/formularios-adocao",
+        element: <ListagemAdocao />,
+      },
+      {
+        path: "/adocao/:id",
+        element: <VisualizacaoAdocao />,
       },
       {
         path: "/eventos-castracao",

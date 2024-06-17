@@ -44,6 +44,11 @@ function NavBar() {
               Animais para adoção
             </Link>
           </li>
+          <li className={`nav-link ${activeLink === "/formularios-adocao" ? "active" : ""}`}>
+            <Link to="/formularios-adocao" onClick={() => setActiveLink("/formularios-adocao")}>
+              Formulários de adoção
+            </Link>
+          </li>
         </ul>
       </div>
 
