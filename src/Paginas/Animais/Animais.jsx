@@ -21,6 +21,29 @@ function Animais() {
   const [mostrarLista, setMostrarLista] = useState(true);
   const [showConfirmAlert, setShowConfirmAlert] = useState(false);
   const [animalToDelete, setAnimalToDelete] = useState(null);
+  const [especies, setEspecies] = useState([]);
+
+  useEffect(() => {
+    const fetchEspecies = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/especie");
+        if (!response.ok) {
+          throw new Error('Erro ao buscar espécie');
+        }
+        const data = await response.json();
+        setEspecies(data);
+      } catch (error) {
+        console.error('Erro ao buscar espécie:', error);
+      }
+    };
+    fetchEspecies();
+  }, []);
+
+  const especiesMap = especies.reduce((acc, especie) => {
+    acc[especie.id] = especie.nome;
+    return acc;
+  }, {});
+
 
   useEffect(() => {
     const fetchAnimais = async () => {
@@ -258,7 +281,7 @@ function Animais() {
                     <td>{animal.id}</td>
                     <td>{animal.numero_baia}</td>
                     <td>{animal.nome}</td>
-                    <td>{animal.especie}</td>
+                    <td>{especiesMap[animal.especie]}</td>
                     <td>{animal.sexo}</td>
                     <td>{animal.castracao}</td>
                     <td>{animal.adocao}</td>

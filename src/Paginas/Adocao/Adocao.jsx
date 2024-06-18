@@ -9,20 +9,44 @@ import {
   Form,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import InputMask from 'react-input-mask';
 import { FaWhatsapp, FaEye } from "react-icons/fa";
 import "./Adocao.css";
+
 
 function Adocao() {
   const [animais, setAnimais] = useState([]);
   const [showFormularioAdocao, setShowFormularioAdocao] = useState(false);
   const [dadosAdotante, setDadosAdotante] = useState({
     nome: "",
-    dataNascimento: "",
+    data_nascimento: "",
     email: "",
     telefone: "",
     endereco: "",
     cidade: "",
   });
+
+  const [especies, setEspecies] = useState([]);
+  useEffect(() => {
+    const fetchEspecies = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/especie");
+        if (!response.ok) {
+          throw new Error('Erro ao buscar espécie');
+        }
+        const data = await response.json();
+        setEspecies(data);
+      } catch (error) {
+        console.error('Erro ao buscar espécie:', error);
+      }
+    };
+    fetchEspecies();
+  }, []);
+
+  const especiesMap = especies.reduce((acc, especie) => {
+    acc[especie.id] = especie.nome;
+    return acc;
+  }, {});
 
   useEffect(() => {
     const fetchAnimais = async () => {
@@ -59,7 +83,7 @@ function Adocao() {
     setShowFormularioAdocao(false);
     setDadosAdotante({
       nome: "",
-      dataNascimento: "",
+      data_nascimento: "",
       email: "",
       telefone: "",
       endereco: "",
@@ -125,11 +149,11 @@ function Adocao() {
                 <Card.Body>
                   <Card.Title>{animal.nome}</Card.Title>
                   <Card.Text>
-                    <strong>Espécie:</strong> {animal.especie}
+                    <strong>Espécie:</strong> {especiesMap[animal.especie]}
                     <br />
                     <strong>Sexo:</strong> {animal.sexo}
                     <br />
-                    <strong>Castração:</strong> {animal.castracao}
+                    <strong>Castrado:</strong> {animal.castracao}
                     <br />
                   </Card.Text>
                   <Link
@@ -176,8 +200,8 @@ function Adocao() {
                 <Form.Label>Data de Nascimento</Form.Label>
                 <Form.Control
                   type="date"
-                  name="dataNascimento"
-                  value={dadosAdotante.dataNascimento}
+                  name="data_nascimento"
+                  value={dadosAdotante.data_nascimento}
                   onChange={handleChangeDadosAdotante}
                 />
               </Form.Group>
@@ -195,13 +219,15 @@ function Adocao() {
               </Form.Group>
               <Form.Group as={Col} md="6">
                 <Form.Label>Telefone</Form.Label>
-                <Form.Control
-                  type="tel"
-                  name="telefone"
-                  value={dadosAdotante.telefone}
-                  onChange={handleChangeDadosAdotante}
-                  required
-                />
+                <InputMask
+                    mask="(99) 99999-9999"
+                    type="text"
+                    name="telefone"
+                    value={dadosAdotante.telefone}
+                    onChange={handleChangeDadosAdotante}
+                    className="form-control"
+                    required
+                  />
               </Form.Group>
             </Row>
             <Row className="mb-3">

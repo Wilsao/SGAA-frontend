@@ -5,6 +5,9 @@ import { Container, Card, Button, Row, Col, Form } from "react-bootstrap";
 function AnimaisCadastro() {
   const { idAnimal } = useParams();
   const navigate = useNavigate();
+  const [especies, setEspecies] = useState([]);
+  const [cuidadores, setCuidadores] = useState([]);
+
   const [animal, setAnimal] = useState({
     nome: "",
     numero_baia: "",
@@ -12,7 +15,40 @@ function AnimaisCadastro() {
     especie: "",
     sexo: "",
     adocao: "",
+    cuidador: "",
   });
+
+  useEffect(() => {
+    const fetchEspecies = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/especie");
+        if (!response.ok) {
+          throw new Error('Erro ao buscar espécie');
+        }
+        const data = await response.json();
+        setEspecies(data);
+      } catch (error) {
+        console.error('Erro ao buscar espécie:', error);
+      }
+    };
+    fetchEspecies();
+  }, []);
+
+  useEffect(() => {
+    const fetchCuidadores = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/cuidador");
+        if (!response.ok) {
+          throw new Error('Erro ao buscar cuidador');
+        }
+        const data = await response.json();
+        setCuidadores(data);
+      } catch (error) {
+        console.error('Erro ao buscar cuidador:', error);
+      }
+    };
+    fetchCuidadores();
+  }, []);
 
   useEffect(() => {
     if (idAnimal) {
@@ -114,9 +150,9 @@ function AnimaisCadastro() {
                     onChange={handleChange}
                     required
                   >
-                    <option value="">Selecione</option>
-                    <option value="Cachorro">Cachorro</option>
-                    <option value="Gato">Gato</option>
+                    {especies.map((especie) => (
+                    <option value={especie.id}>{especie.nome}</option>
+                  ))}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -130,6 +166,19 @@ function AnimaisCadastro() {
                     <option value="">Selecione</option>
                     <option value="Macho">Macho</option>
                     <option value="Fêmea">Fêmea</option>
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Cuidador temporário</Form.Label>
+                  <Form.Select
+                    name="cuidador"
+                    value={animal.cuidador}
+                    onChange={handleChange}
+                    required
+                  >
+                    {cuidadores.map((cuidador) => (
+                    <option value={cuidador.id}>{cuidador.nome}</option>
+                  ))}
                   </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">

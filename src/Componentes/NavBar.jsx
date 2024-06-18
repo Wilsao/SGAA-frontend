@@ -39,14 +39,25 @@ function NavBar() {
               Eventos de arrecadação
             </Link>
           </li>
-          <li className={`nav-link ${activeLink === "/adocao" ? "active" : ""}`}>
-            <Link to="/adocao" onClick={() => setActiveLink("/adocao")}>
-              Animais para adoção
-            </Link>
-          </li>
           <li className={`nav-link ${activeLink === "/formularios-adocao" ? "active" : ""}`}>
             <Link to="/formularios-adocao" onClick={() => setActiveLink("/formularios-adocao")}>
               Formulários de adoção
+            </Link>
+          </li>
+          <li className={`nav-link ${activeLink === "/cuidadores" ? "active" : ""}`}>
+            <Link to="/cuidadores" onClick={() => setActiveLink("/cuidadores")}>
+              Cuidadores
+            </Link>
+          </li>
+          <li className={`nav-link ${activeLink === "/especies" ? "active" : ""}`}>
+            <Link to="/especies" onClick={() => setActiveLink("/especies")}>
+              Espécies
+            </Link>
+          </li>
+          <hr />
+          <li className={`nav-link ${activeLink === "/adocao" ? "active" : ""}`}>
+            <Link to="/adocao" onClick={() => setActiveLink("/adocao")}>
+              Animais para adoção
             </Link>
           </li>
         </ul>

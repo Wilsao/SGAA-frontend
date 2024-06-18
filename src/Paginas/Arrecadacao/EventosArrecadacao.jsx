@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 function Arrecadacao() {
-  const [listaArrecadacaoCadastro, setListaArrecadacaoCadastro] = useState([]);
+  const [listaEventos, setEventos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
   const [filtros, setFiltros] = useState({
@@ -14,19 +14,19 @@ function Arrecadacao() {
   });
 
   useEffect(() => {
-    const fetchArrecadacao = async () => {
+    const fetchEventos = async () => {
       try {
         const response = await fetch("http://localhost:3001/arrecadacao");
         if (!response.ok) {
           throw new Error('Erro ao buscar eventos de arrecadação');
         }
         const data = await response.json();
-        setListaArrecadacaoCadastro(data);
+        setEventos(data);
       } catch (error) {
         console.error('Erro ao buscar eventos de arrecadação:', error);
       }
     };
-    fetchArrecadacao();
+    fetchEventos();
   }, []);
 
   const handleDelete = async (id) => {
@@ -37,7 +37,7 @@ function Arrecadacao() {
       if (!response.ok) {
         throw new Error('Erro ao remover evento de arrecadação');
       }
-      setListaArrecadacaoCadastro(listaArrecadacaoCadastro.filter((evento) => evento.id !== id));
+      setEventos(listaEventos.filter((evento) => evento.id !== id));
       setShowModal(false);
     } catch (error) {
       console.error('Erro ao remover evento de arrecadação:', error);
@@ -59,8 +59,8 @@ function Arrecadacao() {
     setFiltros({ ...filtros, [name]: value });
   };
 
-  const filtrarArrecadacao = () => {
-    return listaArrecadacaoCadastro.filter(
+  const filtrarEventos = () => {
+    return listaEventos.filter(
       (evento) =>
         (filtros.dataInicial === "" || evento.data_evento >= filtros.dataInicial) &&
         (filtros.dataFinal === "" || evento.data_evento <= filtros.dataFinal) &&
@@ -68,9 +68,9 @@ function Arrecadacao() {
     );
   };
 
-  const arrecadacaoFiltrada = filtrarArrecadacao();
-  const quantidadeEventos = arrecadacaoFiltrada.length;
-  const valorTotalArrecadado = arrecadacaoFiltrada.reduce((total, evento) => total + parseFloat(evento.valor_arrecadado), 0);
+  const eventosFiltrados = filtrarEventos();
+  const quantidadeEventos = eventosFiltrados.length;
+  const valorTotalArrecadado = eventosFiltrados.reduce((total, evento) => total + parseFloat(evento.valor_arrecadado), 0);
 
   return (
     <>
@@ -91,6 +91,7 @@ function Arrecadacao() {
             <Form>
               <Row className="align-items-end">
                 <Col>
+                  <label>Data Inicial</label>
                   <Form.Control
                     type="date"
                     name="dataInicial"
@@ -100,6 +101,7 @@ function Arrecadacao() {
                   />
                 </Col>
                 <Col>
+                  <label>Data final</label>
                   <Form.Control
                     type="date"
                     name="dataFinal"
@@ -114,7 +116,7 @@ function Arrecadacao() {
                     name="descricao"
                     value={filtros.descricao}
                     onChange={handleFilterChange}
-                    placeholder="Descrição"
+                    placeholder="Buscar por descrição"
                   />
                 </Col>
               </Row>
@@ -145,7 +147,7 @@ function Arrecadacao() {
                 </tr>
               </thead>
               <tbody>
-                {arrecadacaoFiltrada.map((evento) => (
+                {eventosFiltrados.map((evento) => (
                   <tr key={evento.id}>
                     <td>{evento.id}</td>
                     <td>{new Date(evento.data_evento).toLocaleDateString()}</td>

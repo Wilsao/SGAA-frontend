@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 function EventosCastracao() {
-  const [eventos, setEventos] = useState([]);
+  const [listaEventos, setEventos] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [eventIdToDelete, setEventIdToDelete] = useState(null);
   const [filtros, setFiltros] = useState({
-    data_evento: "",
+    dataInicial: "",
+    dataFinal: "",
     tipo_animal: "",
     sexo_animal: ""
   });
@@ -37,7 +38,7 @@ function EventosCastracao() {
       if (!response.ok) {
         throw new Error('Erro ao remover evento de castração');
       }
-      setEventos(eventos.filter((evento) => evento.id !== id));
+      setEventos(listaEventos.filter((evento) => evento.id !== id));
       setShowModal(false);
     } catch (error) {
       console.error('Erro ao remover evento de castração:', error);
@@ -60,17 +61,19 @@ function EventosCastracao() {
   };
 
   const filtrarEventos = () => {
-    return eventos.filter(
+    return listaEventos.filter(
       (evento) =>
-        (filtros.data_evento === "" ||
-          new Date(evento.data_evento).toLocaleDateString().includes(filtros.data_evento)) &&
+        (filtros.dataInicial === "" || evento.data_evento >= filtros.dataInicial) &&
+        (filtros.dataFinal === "" || evento.data_evento <= filtros.dataFinal) &&
         (filtros.tipo_animal === "" || evento.tipo_animal.toLowerCase().includes(filtros.tipo_animal.toLowerCase())) &&
         (filtros.sexo_animal === "" || evento.sexo_animal.toLowerCase().includes(filtros.sexo_animal.toLowerCase()))
     );
   };
 
   const eventosFiltrados = filtrarEventos();
-
+  const quantidadeEventos = eventosFiltrados.length;
+  const totalCastracoes = eventosFiltrados.reduce((total, evento) => total + parseInt(evento.quantidade_castrada), 0);
+  
   return (
     <>
       <Container className="mt-3">
@@ -90,12 +93,23 @@ function EventosCastracao() {
             <Form>
               <Row className="align-items-end">
                 <Col>
+                  <label>Data Inicial</label>
                   <Form.Control
                     type="date"
-                    name="data_evento"
-                    value={filtros.data_evento}
+                    name="dataInicial"
+                    value={filtros.dataInicial}
                     onChange={handleFilterChange}
-                    placeholder="Data do Evento"
+                    placeholder="Data Inicial"
+                  />
+                </Col>
+                <Col>
+                  <label>Data final</label>
+                  <Form.Control
+                    type="date"
+                    name="dataFinal"
+                    value={filtros.dataFinal}
+                    onChange={handleFilterChange}
+                    placeholder="Data Final"
                   />
                 </Col>
                 <Col>
@@ -124,6 +138,14 @@ function EventosCastracao() {
                 </Col>
               </Row>
             </Form>
+          </Col>
+        </Row>
+        <Row className="mt-3">
+          <Col>
+            <p className="mb-0">Quantidade de Eventos: {quantidadeEventos}</p>
+          </Col>
+          <Col>
+            <p className="mb-0">Total de castrações: {totalCastracoes}</p>
           </Col>
         </Row>
       </Container>

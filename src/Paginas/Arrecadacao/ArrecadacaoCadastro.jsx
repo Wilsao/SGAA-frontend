@@ -58,6 +58,14 @@ function EventosCadastro() {
     }
   };
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
   return (
     <Container className="mt-3">
       <Row className="justify-content-center">
@@ -71,7 +79,7 @@ function EventosCadastro() {
                   <Form.Control
                     type="date"
                     name="data_evento"
-                    value={evento.data_evento}
+                    value={formatDate(evento.data_evento)}
                     onChange={handleChange}
                     required
                   />
@@ -103,7 +111,7 @@ function EventosCadastro() {
                 <Button
                   variant="secondary"
                   className="ms-2"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/eventos-arrecadacao")}
                 >
                   Cancelar
                 </Button>

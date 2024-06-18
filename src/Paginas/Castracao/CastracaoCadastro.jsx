@@ -61,6 +61,14 @@ function CastracaoCadastro() {
     }
   };
 
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
   return (
     <Container className="mt-3">
       <Row className="justify-content-center">
@@ -74,7 +82,7 @@ function CastracaoCadastro() {
                   <Form.Control
                     type="date"
                     name="data_evento"
-                    value={evento.data_evento}
+                    value={formatDate(evento.data_evento)}
                     onChange={handleChange}
                     required
                   />

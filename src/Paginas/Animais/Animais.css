@@ -17,13 +17,17 @@ p {
     color: #3C567F;
 }
 
-input.form-control , select.form-select {
+textarea.form-control, input.form-control , select.form-select {
   border: 1px solid #3C567F !important;
   background-color: transparent !important;
   height: 53px;
   padding: 0 20px;
   outline: 0 !important;
   box-shadow: none !important;
+}
+textarea.form-control{
+  padding: 15px 20px;
+  min-height: 120px;
 }
 
 .label-animation {

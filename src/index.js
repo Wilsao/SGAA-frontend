@@ -4,17 +4,26 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import NavBar from "./Componentes/NavBar";
+
 import Animais from "./Paginas/Animais/Animais";
 import AnimaisCadastro from "./Paginas/Animais/AnimaisCadastro";
 import AnimaisVisualizacao from "./Paginas/Animais/AnimaisVisualizacao";
+
 import EventosCastracao from "./Paginas/Castracao/EventosCastracao";
 import CastracaoCadastro from "./Paginas/Castracao/CastracaoCadastro";
+
 import EventosArrecadacao from "./Paginas/Arrecadacao/EventosArrecadacao";
 import ArrecadacaoCadastro from "./Paginas/Arrecadacao/ArrecadacaoCadastro";
+
 import Adocao from "./Paginas/Adocao/Adocao.jsx";
 import ListagemAdocao from "./Paginas/Adocao/ListagemAdocao.jsx";
 import VisualizacaoAdocao from "./Paginas/Adocao/VisualizacaoAdocao.jsx";
 
+import Especie from "./Paginas/Especie/Especie.jsx";
+import EspecieCadastro from "./Paginas/Especie/EspecieCadastro";
+
+import Cuidador from "./Paginas/Cuidador/Cuidador.jsx";
+import CuidadorCadastro from "./Paginas/Cuidador/CuidadorCadastro.jsx";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +58,18 @@ const router = createBrowserRouter([
         element: <VisualizacaoAdocao />,
       },
       {
+        path: "/especies",
+        element: <Especie />,
+      },
+      {
+        path: "/especies/editar/:id",
+        element: <EspecieCadastro />,
+      },
+      {
+        path: "/especies/novo",
+        element: <EspecieCadastro />,
+      },
+      {
         path: "/eventos-castracao",
         element: <EventosCastracao />,
       },
@@ -71,6 +92,18 @@ const router = createBrowserRouter([
       {
         path: "/eventos-arrecadacao/editar/:idEvento",
         element: <ArrecadacaoCadastro />,
+      },
+      {
+        path: "/cuidadores",
+        element: <Cuidador />,
+      },
+      {
+        path: "/cuidadores/novo",
+        element: <CuidadorCadastro />,
+      },
+      {
+        path: "/cuidadores/editar/:id",
+        element: <CuidadorCadastro />,
       },
     ],
   },
