@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Button, Row, Col, Table, Modal, Form } from "react-bootstrap";
+import { Container, Card, Button, Row, Col, Table, Modal, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
@@ -7,7 +7,9 @@ function Cuidadores() {
   const [cuidadores, setCuidadores] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [cuidadorIdToDelete, setCuidadorIdToDelete] = useState(null);
-  const [filtros, setFiltros] = useState({
+  const [errorMessage, setErrorMessage] = useState("");
+  const [animaisVinculados, setAnimaisVinculados] = useState([]);
+  const [filtros] = useState({
     nome: "",
     endereco: "",
     telefone: ""
@@ -35,11 +37,16 @@ function Cuidadores() {
         method: 'DELETE',
       });
       if (!response.ok) {
-        throw new Error('Erro ao remover cuidador');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao remover cuidador');
       }
       setCuidadores(cuidadores.filter((cuidador) => cuidador.id !== id));
       setShowModal(false);
+      setErrorMessage("");
+      setAnimaisVinculados([]);
     } catch (error) {
+      setErrorMessage(error.message);
+      setAnimaisVinculados(error.animais || []);
       console.error('Erro ao remover cuidador:', error);
     }
   };
@@ -56,6 +63,9 @@ function Cuidadores() {
 
   const filtrarCuidadores = () => {
     return cuidadores
+      .filter((cuidador) => cuidador.nome.toLowerCase().includes(filtros.nome.toLowerCase()))
+      .filter((cuidador) => cuidador.endereco.toLowerCase().includes(filtros.endereco.toLowerCase()))
+      .filter((cuidador) => cuidador.telefone.toLowerCase().includes(filtros.telefone.toLowerCase()));
   };
 
   const cuidadoresFiltrados = filtrarCuidadores();
@@ -77,6 +87,18 @@ function Cuidadores() {
       </Container>
 
       <Container className="mt-3">
+        {errorMessage && (
+          <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+            {errorMessage}
+            {animaisVinculados.length > 0 && (
+              <ul>
+                {animaisVinculados.map((animal, index) => (
+                  <li key={index}>{animal}</li>
+                ))}
+              </ul>
+            )}
+          </Alert>
+        )}
         <Card>
           <Card.Body className="list pb-0">
             <Table className="m-0">

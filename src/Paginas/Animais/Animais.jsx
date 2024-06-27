@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Row, Col, Form, Table, Modal } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaPencilAlt, FaTrashAlt, FaEye } from "react-icons/fa";
-import $ from "jquery";
-import "./Animais.css";
 
 function Animais() {
-  const { idAnimal } = useParams();
   const [animais, setAnimais] = useState([]);
   const [filtros, setFiltros] = useState({
     nome: "",
@@ -44,7 +41,6 @@ function Animais() {
     return acc;
   }, {});
 
-
   useEffect(() => {
     const fetchAnimais = async () => {
       try {
@@ -63,8 +59,7 @@ function Animais() {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    const filteredValue = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
-    setFiltros({ ...filtros, [name]: filteredValue });
+    setFiltros({ ...filtros, [name]: value });
   };
 
   const filtrarAnimais = (animais) => {
@@ -72,11 +67,11 @@ function Animais() {
       (animal) =>
         (filtros.nome === "" ||
           animal.nome.toLowerCase().includes(filtros.nome.toLowerCase())) &&
-        (filtros.numero_baia === "" || animal.numero_baia === parseInt(filtros.numero_baia)) &&
-        (filtros.castracao === "" || animal.castracao === filtros.castracao) &&
-        (filtros.especie === "" || animal.especie === filtros.especie) &&
+        (filtros.numero_baia === "" || animal.numero_baia.toLowerCase().includes(filtros.numero_baia.toLowerCase())) &&
+        (filtros.castracao === "" || animal.castracao === parseInt(filtros.castracao)) &&
+        (filtros.especie === "" || animal.especie === parseInt(filtros.especie)) &&
         (filtros.sexo === "" || animal.sexo === filtros.sexo) &&
-        (filtros.adocao === "" || animal.adocao === filtros.adocao)
+        (filtros.adocao === "" || animal.adocao === parseInt(filtros.adocao))
     );
   };
 
@@ -105,43 +100,6 @@ function Animais() {
     setAnimalToDelete(id);
     setShowConfirmAlert(true);
   };
-
-  useEffect(() => {
-    $(".label-animation").each(function () {
-      const $this = $(this);
-      if (!$this.hasClass("label-processed")) {
-        if ($this.is('input[type="date"]')) {
-          $this
-            .wrap('<div class="label-animation type-date"></div>')
-            .addClass("label-processed");
-          $("<label>" + $this.attr("placeholder") + "</label>").insertAfter(
-            this
-          );
-        } else if ($this.is("input") || $this.is("textarea")) {
-          $this
-            .wrap('<div class="label-animation"></div>')
-            .addClass("label-processed");
-          $("<label>" + $this.attr("placeholder") + "</label>").insertAfter(
-            this
-          );
-        }
-      }
-      if ($this.val() === "") {
-        $this.parent().removeClass("active");
-      } else {
-        $this.parent().addClass("active");
-      }
-    })
-      .on("focus", function () {
-        $(this).parent().addClass("active").addClass("focus");
-      })
-      .on("focusout", function () {
-        $(this).parent().removeClass("focus");
-        if ($(this).val() === "") {
-          $(this).parent().removeClass("active");
-        }
-      });
-  }, []);
 
   return (
     <>
@@ -174,19 +132,17 @@ function Animais() {
                     name="nome"
                     value={filtros.nome}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   />
                 </Form.Group>
               </Col>
               <Col lg="2">
                 <Form.Group className="mb-3">
                   <Form.Control
-                    type="number"
+                    type="text"
                     placeholder="nº Baia"
                     name="numero_baia"
                     value={filtros.numero_baia}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   />
                 </Form.Group>
               </Col>
@@ -197,11 +153,10 @@ function Animais() {
                     name="castracao"
                     value={filtros.castracao}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   >
                     <option value="">Castração</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -212,23 +167,23 @@ function Animais() {
                     name="especie"
                     value={filtros.especie}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   >
                     <option value="">Espécie</option>
-                    <option value="Cachorro">Cachorro</option>
-                    <option value="Gato">Gato</option>
+                    {especies.map((especie) => (
+                      <option key={especie.id} value={especie.id}>
+                        {especie.nome}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
               <Col lg="2">
-
                 <Form.Group className="mb-3">
                   <Form.Select
                     aria-label="Select Sexo"
                     name="sexo"
                     value={filtros.sexo}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   >
                     <option value="">Sexo</option>
                     <option value="Macho">Macho</option>
@@ -237,18 +192,16 @@ function Animais() {
                 </Form.Group>
               </Col>
               <Col lg="2">
-
                 <Form.Group className="mb-3">
                   <Form.Select
                     aria-label="Select Adoção"
                     name="adocao"
                     value={filtros.adocao}
                     onChange={handleFilterChange}
-                    className="label-animation"
                   >
                     <option value="">Adoção</option>
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -271,8 +224,10 @@ function Animais() {
                   <th>Nome</th>
                   <th>Espécie</th>
                   <th>Sexo</th>
-                  <th>Castração</th>
-                  <th>Disponível para adoção?</th>
+                  <th>Castrado</th>
+                  <th>Pelagem</th>
+                  <th>Disp. adoção</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -283,8 +238,9 @@ function Animais() {
                     <td>{animal.nome}</td>
                     <td>{especiesMap[animal.especie]}</td>
                     <td>{animal.sexo}</td>
-                    <td>{animal.castracao}</td>
-                    <td>{animal.adocao}</td>
+                    <td>{animal.castracao === 1 ? "Sim" : "Não"}</td>
+                    <td>{animal.cor_pelagem}</td>
+                    <td>{animal.adocao === 1 ? "Sim" : "Não"}</td>
                     <td className="d-flex align-items-center">
                       <Link to={`/animal/${animal.id}`} className="btn btn-primary view m-1">
                         Visualizar <FaEye />

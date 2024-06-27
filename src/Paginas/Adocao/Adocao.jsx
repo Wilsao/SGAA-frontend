@@ -11,8 +11,6 @@ import {
 import { Link } from "react-router-dom";
 import InputMask from 'react-input-mask';
 import { FaWhatsapp, FaEye } from "react-icons/fa";
-import "./Adocao.css";
-
 
 function Adocao() {
   const [animais, setAnimais] = useState([]);
@@ -25,8 +23,13 @@ function Adocao() {
     endereco: "",
     cidade: "",
   });
-
+  const [filtros, setFiltros] = useState({
+    especie: "",
+    sexo: "",
+    castracao: "",
+  });
   const [especies, setEspecies] = useState([]);
+
   useEffect(() => {
     const fetchEspecies = async () => {
       try {
@@ -56,7 +59,7 @@ function Adocao() {
           throw new Error("Erro ao buscar animais");
         }
         const data = await response.json();
-        const animaisAdocao = data.filter((animal) => animal.adocao === "Sim");
+        const animaisAdocao = data.filter((animal) => animal.adocao === 1);
         setAnimais(animaisAdocao);
       } catch (error) {
         console.error("Erro ao buscar animais:", error);
@@ -64,6 +67,39 @@ function Adocao() {
     };
     fetchAnimais();
   }, []);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFiltros({ ...filtros, [name]: value });
+  };
+
+  const filtrarAnimais = () => {
+    return animais.filter(
+      (animal) =>
+        (filtros.especie === "" || animal.especie === parseInt(filtros.especie)) &&
+        (filtros.sexo === "" || animal.sexo === filtros.sexo) &&
+        (filtros.castracao === "" || animal.castracao === parseInt(filtros.castracao))
+    );
+  };
+
+  const animaisFiltrados = filtrarAnimais();
+
+  const calcularIdade = (dataNascimento) => {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    const idadeEmMeses = hoje.getMonth() - nascimento.getMonth() + (12 * (hoje.getFullYear() - nascimento.getFullYear()));
+    
+    if (idadeEmMeses < 2) {
+      const idadeEmSemanas = Math.floor((hoje - nascimento) / (1000 * 60 * 60 * 24 * 7));
+      return `${idadeEmSemanas} ${idadeEmSemanas === 1 ? "semana" : "semanas"}`;
+    } else if (idadeEmMeses < 12) {
+      return `${idadeEmMeses} ${idadeEmMeses === 1 ? "mês" : "meses"}`;
+    } else {
+      const anos = Math.floor(idadeEmMeses / 12);
+      const meses = idadeEmMeses % 12;
+      return `${anos} ${anos === 1 ? "ano" : "anos"}${meses > 0 ? ` e ${meses} ${meses === 1 ? "mês" : "meses"}` : ""}`;
+    }
+  };
 
   const openWhatsApp = (nomeAnimal) => {
     const mensagem = encodeURIComponent(
@@ -101,7 +137,7 @@ function Adocao() {
 
   const handleSubmitFormularioAdocao = async (e) => {
     e.preventDefault();
-    console.log("Dados a serem enviados:", dadosAdotante); // Log dos dados antes de enviar
+    console.log("Dados a serem enviados:", dadosAdotante); 
     try {
       const response = await fetch("http://localhost:3001/adocao", {
         method: "POST",
@@ -111,7 +147,7 @@ function Adocao() {
         body: JSON.stringify(dadosAdotante),
       });
 
-      console.log("Resposta do servidor:", response); // Log da resposta do servidor
+      console.log("Resposta do servidor:", response);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -135,17 +171,64 @@ function Adocao() {
             <h2>Animais Disponíveis para Adoção</h2>
           </Col>
         </Row>
+        <Row className="mb-3">
+          <Col md={4}>
+            <Form.Group>
+              <Form.Select
+                aria-label="Filtrar por Espécie"
+                name="especie"
+                value={filtros.especie}
+                onChange={handleFilterChange}
+              >
+                <option value="">Todas as Espécies</option>
+                {especies.map((especie) => (
+                  <option key={especie.id} value={especie.id}>
+                    {especie.nome}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group>
+              <Form.Select
+                aria-label="Filtrar por Sexo"
+                name="sexo"
+                value={filtros.sexo}
+                onChange={handleFilterChange}
+              >
+                <option value="">Todos os Sexos</option>
+                <option value="Macho">Macho</option>
+                <option value="Fêmea">Fêmea</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group>
+              <Form.Select
+                aria-label="Filtrar por Castração"
+                name="castracao"
+                value={filtros.castracao}
+                onChange={handleFilterChange}
+              >
+                <option value="">Todos</option>
+                <option value="1">Castrado</option>
+                <option value="0">Não Castrado</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+        </Row>
         <p className="mb-1">
-          Foram encontrados {animais.length} animais disponíveis para adoção:
+          Foram encontrados {animaisFiltrados.length} animais disponíveis para adoção:
         </p>
       </Container>
 
       <Container>
         <Row>
-          {animais.map((animal) => (
+          {animaisFiltrados.map((animal) => (
             <Col key={animal.id} lg={6} className="mb-3">
               <Card>
-                <Card.Img variant="top" src={animal.foto_url} />
+                {animal.foto_url && <Card.Img variant="top" src={animal.foto_url} />}
                 <Card.Body>
                   <Card.Title>{animal.nome}</Card.Title>
                   <Card.Text>
@@ -153,25 +236,27 @@ function Adocao() {
                     <br />
                     <strong>Sexo:</strong> {animal.sexo}
                     <br />
-                    <strong>Castrado:</strong> {animal.castracao}
+                    <strong>Castrado:</strong> {animal.castracao === 1 ? "Sim" : "Não"}
+                    <br />
+                    <strong>Idade:</strong> {calcularIdade(animal.data_nascimento_aproximada)}
                     <br />
                   </Card.Text>
-                  <Link
+                  {/* <Link
                     to={`/animal/${animal.id}`}
                     className="btn btn-primary me-2"
                   >
                     Visualizar <FaEye />
-                  </Link>
+                  </Link> */}
                   <Button
                     className="btn-whatsapp me-2"
                     variant="primary"
                     onClick={() => openWhatsApp(animal.nome)}
                   >
-                    Tirar dúvidas <FaWhatsapp />
+                    Quero adotar <FaWhatsapp />
                   </Button>
-                  <Button variant="primary" onClick={openFormularioAdocao}>
+                  {/* <Button variant="primary" onClick={openFormularioAdocao}>
                     Quero adotar!
-                  </Button>
+                  </Button> */}
                 </Card.Body>
               </Card>
             </Col>

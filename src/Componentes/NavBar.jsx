@@ -1,17 +1,11 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import Logo from "../Imagens/Logo.png";
-import "./NavBar.css";
 import { useState, useEffect } from "react";
 
 function NavBar() {
-  const [show, setShow] = useState(true);
   const [activeLink, setActiveLink] = useState("/");
   const location = useLocation();
-
-  const handeShow = () => {
-    setShow(!show);
-  };
 
   useEffect(() => {
     setActiveLink(location.pathname);
@@ -20,30 +14,30 @@ function NavBar() {
   return (
     <div className="app-container">
       <div className={`${activeLink === "/adocao" ? "d-none" : "side-navbar"}`} id="sidebar">
-        <h1>
-          <img src={Logo} className="d-block mx-auto img-fluid" alt="Logo SPAA" />
-        </h1>
-        <ul className="nav flex-column list-unstyled text-white w-100">
+        <div className="logo-container text-center">
+          <img src={Logo} className="img-fluid logo" alt="Logo SPAA" />
+        </div>
+        <ul className="nav flex-column list-unstyled w-100">
           <li className={`nav-link ${activeLink === "/" ? "active" : ""}`}>
             <Link to="/" onClick={() => setActiveLink("/")}>
-              Lista de animais
+              Lista de Animais
             </Link>
           </li>
           <li className={`nav-link ${activeLink === "/eventos-castracao" ? "active" : ""}`}>
             <Link to="/eventos-castracao" onClick={() => setActiveLink("/eventos-castracao")}>
-              Eventos de castração
+              Eventos de Castração
             </Link>
           </li>
           <li className={`nav-link ${activeLink === "/eventos-arrecadacao" ? "active" : ""}`}>
             <Link to="/eventos-arrecadacao" onClick={() => setActiveLink("/eventos-arrecadacao")}>
-              Eventos de arrecadação
+              Eventos de Arrecadação
             </Link>
           </li>
-          <li className={`nav-link ${activeLink === "/formularios-adocao" ? "active" : ""}`}>
+          {/* <li className={`nav-link ${activeLink === "/formularios-adocao" ? "active" : ""}`}>
             <Link to="/formularios-adocao" onClick={() => setActiveLink("/formularios-adocao")}>
-              Formulários de adoção
+              Formulários de Adoção
             </Link>
-          </li>
+          </li> */}
           <li className={`nav-link ${activeLink === "/cuidadores" ? "active" : ""}`}>
             <Link to="/cuidadores" onClick={() => setActiveLink("/cuidadores")}>
               Cuidadores
@@ -57,7 +51,7 @@ function NavBar() {
           <hr />
           <li className={`nav-link ${activeLink === "/adocao" ? "active" : ""}`}>
             <Link to="/adocao" onClick={() => setActiveLink("/adocao")}>
-              Animais para adoção
+              Animais para Adoção
             </Link>
           </li>
         </ul>

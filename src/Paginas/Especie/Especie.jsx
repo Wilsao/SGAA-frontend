@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Button, Row, Col, Table, Modal, Form } from "react-bootstrap";
+import { Container, Card, Button, Row, Col, Table, Modal, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
@@ -7,11 +7,7 @@ function Especies() {
   const [especies, setEspecies] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [especieIdToDelete, setEspecieIdToDelete] = useState(null);
-  const [filtros, setFiltros] = useState({
-    nome: "",
-    tipo_animal: "",
-    sexo_animal: ""
-  });
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchEspecies = async () => {
@@ -35,11 +31,14 @@ function Especies() {
         method: 'DELETE',
       });
       if (!response.ok) {
-        throw new Error('Erro ao remover espécie');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao remover espécie');
       }
       setEspecies(especies.filter((especie) => especie.id !== id));
       setShowModal(false);
+      setErrorMessage(""); // Limpa a mensagem de erro em caso de sucesso
     } catch (error) {
+      setErrorMessage(error.message);
       console.error('Erro ao remover espécie:', error);
     }
   };
@@ -53,23 +52,6 @@ function Especies() {
     setShowModal(true);
     setEspecieIdToDelete(id);
   };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFiltros({ ...filtros, [name]: value });
-  };
-
-  const filtrarEspecies = () => {
-    return especies.filter(
-      (especie) =>
-        (filtros.nome === "" ||
-          new Date(especie.nome).toLocaleDateString().includes(filtros.nome)) &&
-        (filtros.tipo_animal === "" || especie.tipo_animal.toLowerCase().includes(filtros.tipo_animal.toLowerCase())) &&
-        (filtros.sexo_animal === "" || especie.sexo_animal.toLowerCase().includes(filtros.sexo_animal.toLowerCase()))
-    );
-  };
-
-  const especiesFiltrados = filtrarEspecies();
 
   return (
     <>
@@ -88,6 +70,11 @@ function Especies() {
       </Container>
 
       <Container className="mt-3">
+        {errorMessage && (
+          <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+            {errorMessage}
+          </Alert>
+        )}
         <Card>
           <Card.Body className="list pb-0">
             <Table className="m-0">
@@ -99,7 +86,7 @@ function Especies() {
                 </tr>
               </thead>
               <tbody>
-                {especiesFiltrados.map((especie) => (
+                {especies.map((especie) => (
                   <tr key={especie.id}>
                     <td>{especie.id}</td>
                     <td>{especie.nome}</td>

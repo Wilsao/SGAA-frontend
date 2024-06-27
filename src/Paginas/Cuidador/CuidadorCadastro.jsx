@@ -5,8 +5,8 @@ import { cpf, cnpj } from 'cpf-cnpj-validator';
 import InputMask from 'react-input-mask';
 
 function CuidadorCadastro() {
-  const { id } = useParams(); 
-  const navigate = useNavigate(); 
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [cuidador, setCuidador] = useState({
     nome: '',
@@ -94,6 +94,8 @@ function CuidadorCadastro() {
       console.log('Resposta da API:', response);
 
       if (!response.ok) {
+        const errorData = await response.json();
+        setErroValidacao(errorData.error);
         throw new Error('Erro ao salvar cuidador');
       }
 
@@ -177,6 +179,7 @@ function CuidadorCadastro() {
                     required
                   />
                 </Form.Group>
+                {erroValidacao && <div className="alert alert-danger">{erroValidacao}</div>}
                 <Button variant="primary" type="submit">
                   {id ? "Atualizar" : "Cadastrar"}
                 </Button>

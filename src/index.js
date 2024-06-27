@@ -3,7 +3,9 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+
 import NavBar from "./Componentes/NavBar";
+import TopNavBar from "./Componentes/TopNavBar";
 
 import Animais from "./Paginas/Animais/Animais";
 import AnimaisCadastro from "./Paginas/Animais/AnimaisCadastro";
@@ -24,90 +26,36 @@ import EspecieCadastro from "./Paginas/Especie/EspecieCadastro";
 
 import Cuidador from "./Paginas/Cuidador/Cuidador.jsx";
 import CuidadorCadastro from "./Paginas/Cuidador/CuidadorCadastro.jsx";
-
 const router = createBrowserRouter([
   {
     element: <NavBar />,
     children: [
-      {
-        path: "/",
-        element: <Animais />,
-      },
-      {
-        path: "/animal/novo",
-        element: <AnimaisCadastro />,
-      },
-      {
-        path: "/animal/editar/:idAnimal",
-        element: <AnimaisCadastro />,
-      },
-      {
-        path: "/animal/:idAnimal",
-        element: <AnimaisVisualizacao />,
-      },
-      {
-        path: "/adocao",
-        element: <Adocao />,
-      },
-      {
-        path: "/formularios-adocao",
-        element: <ListagemAdocao />,
-      },
-      {
-        path: "/adocao/:id",
-        element: <VisualizacaoAdocao />,
-      },
-      {
-        path: "/especies",
-        element: <Especie />,
-      },
-      {
-        path: "/especies/editar/:id",
-        element: <EspecieCadastro />,
-      },
-      {
-        path: "/especies/novo",
-        element: <EspecieCadastro />,
-      },
-      {
-        path: "/eventos-castracao",
-        element: <EventosCastracao />,
-      },
-      {
-        path: "/eventos-castracao/novo",
-        element: <CastracaoCadastro />,
-      },
-      {
-        path: "/eventos-castracao/editar/:id",
-        element: <CastracaoCadastro />,
-      },
-      {
-        path: "/eventos-arrecadacao",
-        element: <EventosArrecadacao />,
-      },
-      {
-        path: "/eventos-arrecadacao/novo",
-        element: <ArrecadacaoCadastro />,
-      },
-      {
-        path: "/eventos-arrecadacao/editar/:idEvento",
-        element: <ArrecadacaoCadastro />,
-      },
-      {
-        path: "/cuidadores",
-        element: <Cuidador />,
-      },
-      {
-        path: "/cuidadores/novo",
-        element: <CuidadorCadastro />,
-      },
-      {
-        path: "/cuidadores/editar/:id",
-        element: <CuidadorCadastro />,
-      },
+      { path: "/", element: <Animais /> },
+      { path: "/animal/novo", element: <AnimaisCadastro /> },
+      { path: "/animal/editar/:idAnimal", element: <AnimaisCadastro /> },
+      { path: "/animal/:idAnimal", element: <AnimaisVisualizacao /> },
+      { path: "/formularios-adocao", element: <ListagemAdocao /> },
+      { path: "/adocao/:id", element: <VisualizacaoAdocao /> },
+      { path: "/especies", element: <Especie /> },
+      { path: "/especies/novo", element: <EspecieCadastro /> },
+      { path: "/especies/editar/:id", element: <EspecieCadastro /> },
+      { path: "/eventos-castracao", element: <EventosCastracao /> },
+      { path: "/eventos-castracao/novo", element: <CastracaoCadastro /> },
+      { path: "/eventos-castracao/editar/:id", element: <CastracaoCadastro /> },
+      { path: "/eventos-arrecadacao", element: <EventosArrecadacao /> },
+      { path: "/eventos-arrecadacao/novo", element: <ArrecadacaoCadastro /> },
+      { path: "/eventos-arrecadacao/editar/:idEvento", element: <ArrecadacaoCadastro /> },
+      { path: "/cuidadores", element: <Cuidador /> },
+      { path: "/cuidadores/novo", element: <CuidadorCadastro /> },
+      { path: "/cuidadores/editar/:id", element: <CuidadorCadastro /> },
     ],
   },
+  {
+    element: <TopNavBar />,
+    children: [{ path: "/adocao", element: <Adocao /> }],
+  },
 ]);
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
