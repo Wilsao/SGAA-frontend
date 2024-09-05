@@ -18,7 +18,14 @@ function CastracaoCadastro() {
     if (id) {
       const fetchEvento = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/castracao/${id}`);
+          const token = () => localStorage.getItem('token');
+          const response = await fetch(`http://localhost:3001/castracao/${id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
           if (!response.ok) {
             throw new Error("Erro ao buscar evento de castração");
           }

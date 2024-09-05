@@ -17,7 +17,14 @@ function EventosCastracao() {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const response = await fetch("http://localhost:3001/castracao");
+        const token = await localStorage.getItem('token');
+        const response = await fetch('http://localhost:3001/castracao', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
         if (!response.ok) {
           throw new Error('Erro ao buscar eventos de castração');
         }

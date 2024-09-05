@@ -26,6 +26,10 @@ import EspecieCadastro from "./Paginas/Especie/EspecieCadastro";
 
 import Cuidador from "./Paginas/Cuidador/Cuidador.jsx";
 import CuidadorCadastro from "./Paginas/Cuidador/CuidadorCadastro.jsx";
+
+import LoginPage from "./Paginas/Login/Login.jsx";
+import Registro from "./Paginas/Registro/Registro.jsx";
+
 const router = createBrowserRouter([
   {
     element: <NavBar />,
@@ -48,11 +52,15 @@ const router = createBrowserRouter([
       { path: "/cuidadores", element: <Cuidador /> },
       { path: "/cuidadores/novo", element: <CuidadorCadastro /> },
       { path: "/cuidadores/editar/:id", element: <CuidadorCadastro /> },
+      { path: "/registro", element: <Registro /> }
     ],
   },
   {
     element: <TopNavBar />,
-    children: [{ path: "/adocao", element: <Adocao /> }],
+    children: [
+      { path: "/login", element: <LoginPage /> },
+      { path: "/adocao", element: <Adocao /> },
+    ],
   },
 ]);
 

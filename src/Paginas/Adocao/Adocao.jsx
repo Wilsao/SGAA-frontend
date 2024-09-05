@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -14,6 +15,7 @@ import { FaWhatsapp, FaEye } from "react-icons/fa";
 
 function Adocao() {
   const [animais, setAnimais] = useState([]);
+  const navigate = useNavigate();
   const [showFormularioAdocao, setShowFormularioAdocao] = useState(false);
   const [dadosAdotante, setDadosAdotante] = useState({
     nome: "",

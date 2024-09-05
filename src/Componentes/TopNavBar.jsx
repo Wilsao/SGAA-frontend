@@ -23,6 +23,14 @@ function TopNavBar() {
             <Nav className="ms-auto">
               <Nav.Link 
                 as={Link} 
+                to="/login" 
+                className={activeLink === "/login" ? "active py-2" : "py-2"}
+                onClick={() => setActiveLink("/login")}
+              >
+                Entrar
+              </Nav.Link>
+              <Nav.Link 
+                as={Link} 
                 to="/adocao" 
                 className={activeLink === "/adocao" ? "active py-2" : "py-2"}
                 onClick={() => setActiveLink("/adocao")}
