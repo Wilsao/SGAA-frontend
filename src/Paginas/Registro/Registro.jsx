@@ -1,65 +1,78 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Registro.css'; // Vamos usar o mesmo arquivo CSS
+import './Registro.css'; // Vamos criar um arquivo CSS específico para o registro
 
 const Register = () => {
-  const [nome, setNome] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
+  const [cpf, setCpf] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Para redirecionar após o registro
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (senha !== confirmPassword) {
-      setError('Senhas não batem');
+    if (password !== confirmPassword) {
+      setError('As senhas não correspondem.');
       return;
     }
-
+    let nome = name;
+    let senha = password;
     const registerData = {
       nome,
       email,
+      cpf,
       senha,
     };
 
     try {
       const token = await localStorage.getItem('token');
-      const response = await fetch('https://localhost:3001/usuario', {
+      const response = await fetch('http://localhost:3001/usuario', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(registerData),
       });
 
       if (response.ok) {
         const data = await response.json();
+        
         navigate('/login');
       } else {
         const errData = await response.json();
-        setError(errData.message || 'Registration failed');
+        setError(errData.message || 'Falha no registro.');
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError('Ocorreu um erro. Por favor, tente novamente.', error);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Register</h2>
+    <div className="register-container">
+      <div className="register-box">
+        <h2>Registro</h2>
         {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleRegister}>
           <div className="input-group">
-            <label>Name:</label>
+            <label>Nome:</label>
             <input
               type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <label>CPF:</label>
+            <input
+              type="text"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
               required
             />
           </div>
@@ -73,16 +86,16 @@ const Register = () => {
             />
           </div>
           <div className="input-group">
-            <label>Password:</label>
+            <label>Senha:</label>
             <input
               type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           <div className="input-group">
-            <label>Confirm Password:</label>
+            <label>Confirmar Senha:</label>
             <input
               type="password"
               value={confirmPassword}
@@ -90,7 +103,7 @@ const Register = () => {
               required
             />
           </div>
-          <button type="submit">Register</button>
+          <button type="submit">Registrar</button>
         </form>
       </div>
     </div>
